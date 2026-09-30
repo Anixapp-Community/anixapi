@@ -130,15 +130,6 @@ try {
 
 
 
-## Проекты на базе библиотеки
-
-- [AniDesk](https://github.com/theDesConnet/AniDesk) — неофициальный десктоп-клиент Anixart
-- [AnixApp](https://github.com/Maks1mio/anixapp) — неофициальное приложение Anixart для ПК
-
----
-
-
-
 ## Лицензия
 
 Проект распространяется под **[GPL-2.0](LICENSE)** — как и [оригинальный AnixartJS](https://github.com/theDesConnet/AnixartJS).
