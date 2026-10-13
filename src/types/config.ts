@@ -24,6 +24,8 @@ export interface IConfigUrlsResponse extends IResponse {
 export interface ITogglesResponse extends IResponse {
     minVersionCode?: number,
     lastVersionCode?: number,
+    /** Минимальный rating_score для POST channel/blog/create (Android BlogCreate). */
+    minBlogCreateRatingScore?: number,
     whatsNew?: string,
     downloadLink?: string,
     baseUrl?: string,

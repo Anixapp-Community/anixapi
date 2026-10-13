@@ -1,5 +1,5 @@
 import { Anixart } from "../../client";
-import { DefaultResult, IBaseApiParams, INotificationPreferenceResponse, IPageableResponse, IProfileReleaseTypeNotificationPreferencesEditRequest, IProfileStatusNotificationPreferencesEditRequest, IProfileTypeNotificationPreferencesEditRequest, IRelease, IResponse, NotificationPreferenceEditType } from "../../types";
+import { DefaultResult, IBaseApiParams, INotificationPreferenceResponse, IPageableResponse, IProfileReleaseTypeNotificationPreferencesEditRequest, IProfileReleaseTypeNotificationPreferencesResponse, IProfileStatusNotificationPreferencesEditRequest, IProfileTypeNotificationPreferencesEditRequest, IRelease, IResponse, NotificationPreferenceEditType } from "../../types";
 
 
 /**
@@ -121,8 +121,8 @@ export class NotificationPreference {
      * @example
      * const result = await client.endpoints.notificationPreference.profileReleaseTypeNotificationPreferences(1, ...);
      */
-    public async profileReleaseTypeNotificationPreferences(releaseId: number, options?: IBaseApiParams): Promise<IResponse> {
-        return await this.client.call<number, IResponse>({ path: `/profile/preference/notification/release/type/${releaseId}`, ...options });
+    public async profileReleaseTypeNotificationPreferences(releaseId: number, options?: IBaseApiParams): Promise<IProfileReleaseTypeNotificationPreferencesResponse> {
+        return await this.client.call<number, IProfileReleaseTypeNotificationPreferencesResponse>({ path: `/profile/preference/notification/release/type/${releaseId}`, ...options });
     }
 
     /**
@@ -218,7 +218,7 @@ export class NotificationPreference {
     }
 
     /** @alias {@link NotificationPreference.profileReleaseTypeNotificationPreferences} */
-    public async releaseTypes(releaseId: number, options?: IBaseApiParams): Promise<IResponse> {
+    public async releaseTypes(releaseId: number, options?: IBaseApiParams): Promise<IProfileReleaseTypeNotificationPreferencesResponse> {
         return this.profileReleaseTypeNotificationPreferences(releaseId, options);
     }
 

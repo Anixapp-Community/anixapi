@@ -112,16 +112,22 @@ export interface ICollectionReportRequest {
 export interface IDirectLinksRequest {}
 
 export interface IProfileReleaseTypeNotificationPreferencesEditRequest {
-    profile_release_type_notification_preferences?: unknown,
+    profile_release_type_notification_preferences?: number[]
     release_id?: number
 }
 
 export interface IProfileStatusNotificationPreferencesEditRequest {
-    profile_status_notification_preferences?: unknown
+    /** Android Retrofit field name (camelCase). */
+    profileStatusNotificationPreferences?: number[]
+    /** @deprecated snake_case alias — prefer camelCase */
+    profile_status_notification_preferences?: number[]
 }
 
 export interface IProfileTypeNotificationPreferencesEditRequest {
-    profile_type_notification_preferences?: unknown
+    /** Android Retrofit field name (camelCase). */
+    profileTypeNotificationPreferences?: number[]
+    /** @deprecated snake_case alias — prefer camelCase */
+    profile_type_notification_preferences?: number[]
 }
 
 export interface IPrivacyEditRequest {
