@@ -14,7 +14,7 @@
  */
 
 import {
-    Article, ArticleComment, ArticleSuggestion, Auth, Channel, Collection, CollectionComment, CollectionFavorite, CollectionMy, Config, Discover, Episode, Export, Favorite, Feed, Filter, History, Import, Notification, NotificationPreference, Profile, ProfileBadge, ProfileBlockList, ProfileDeletion, ProfileFriend, ProfileHealth, ProfileList, ProfilePreference, ProfileReleaseVote, ProfileRoleList, Related, Release, ReleaseComment, ReleaseStreamingPlatform, ReleaseVideo, ReleaseVideoAppeal, ReleaseVideoFavorite, Report, Schedule, Search, Type
+    Achievement, Article, ArticleComment, ArticleSuggestion, Auth, Channel, Collection, CollectionComment, CollectionFavorite, CollectionMy, Config, Discover, Episode, Export, Favorite, Feed, Filter, History, Import, Notification, NotificationPreference, Profile, ProfileBadge, ProfileBlockList, ProfileDeletion, ProfileFriend, ProfileHealth, ProfileList, ProfilePreference, ProfileReleaseVote, ProfileRoleList, Related, Release, ReleaseComment, ReleaseStreamingPlatform, ReleaseVideo, ReleaseVideoAppeal, ReleaseVideoFavorite, Report, Schedule, Search, Type
 } from "./api";
 import { Anixart } from "./client";
 
@@ -43,6 +43,8 @@ export class Endpoints {
     // ——— Profile ———
     public readonly profile: Profile;
     public readonly profileBadge: ProfileBadge;
+    /** Значки по коду (Anixart 10.5+) */
+    public readonly achievement: Achievement;
     public readonly profileBlockList: ProfileBlockList;
     public readonly profileDeletion: ProfileDeletion;
     public readonly profileFriend: ProfileFriend;
@@ -104,6 +106,7 @@ export class Endpoints {
 
         this.profile = new Profile(client);
         this.profileBadge = new ProfileBadge(client);
+        this.achievement = new Achievement(client);
         this.profileBlockList = new ProfileBlockList(client);
         this.profileDeletion = new ProfileDeletion(client);
         this.profileFriend = new ProfileFriend(client);

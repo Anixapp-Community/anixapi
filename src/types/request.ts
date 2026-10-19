@@ -14,7 +14,9 @@ export interface IBaseApiParams {
     /** Коды `code`, которые считаются успехом. По умолчанию `[0]`. */
     successCodes?: number[],
     /** Enum кодов результата для имени ошибки (`InvalidPassword` и т.п.). */
-    resultEnum?: Record<number, string>
+    resultEnum?: Record<number, string>,
+    /** Дополнительные заголовки запроса */
+    headers?: Record<string, string>
 }
 
 export interface IBaseRequest extends IBaseApiParams {

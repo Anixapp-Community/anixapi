@@ -377,4 +377,19 @@ export class ProfilePreference {
     public async yandexUnbind(options?: IBaseApiParams): Promise<IYandexUnbindResponse> {
         return await this.client.call<number, IYandexUnbindResponse>({ path: `/profile/preference/yandex/unbind`, method: 'POST', ...options });
     }
+
+    /**
+     * POST profile/preference/login/history/delete (Anixart 10.5+)
+     *
+     * Очищает историю смены логина.
+     *
+     * Возможные коды ответа: {@link DefaultResult}
+     * @returns {@link IResponse}
+     *
+     * @example
+     * const result = await client.endpoints.profilePreference.deleteLoginHistory(...);
+     */
+    public async deleteLoginHistory(options?: IBaseApiParams): Promise<IResponse> {
+        return await this.client.call<number, IResponse>({ path: `/profile/preference/login/history/delete`, method: 'POST', ...options });
+    }
 }

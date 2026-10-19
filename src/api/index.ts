@@ -1,3 +1,4 @@
+export * from "./achievement";
 export * from "./auth";
 export * from "./config";
 export * from "./discover";

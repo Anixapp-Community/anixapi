@@ -87,7 +87,9 @@ export class Notification {
     }
 
     /**
-     * GET notification/article/comment/delete/{id}
+     * GET notification/articleComment/delete/{id}
+     *
+     * До Anixart 10.5 маршрут был `notification/article/comment/delete/{id}`.
      *
      * Возможные коды ответа: {@link DefaultResult}
      * @returns {@link IResponse}
@@ -96,7 +98,22 @@ export class Notification {
      * const result = await client.endpoints.notification.deleteArticleCommentNotification(1, ...);
      */
     public async deleteArticleCommentNotification(id2: number, options?: IBaseApiParams): Promise<IResponse> {
-        return await this.client.call<number, IResponse>({ path: `/notification/article/comment/delete/${id2}`, ...options });
+        return await this.client.call<number, IResponse>({ path: `/notification/articleComment/delete/${id2}`, ...options });
+    }
+
+    /**
+     * GET notification/article/delete/{id} (Anixart 10.5+)
+     *
+     * Удаляет уведомление о новой статье.
+     *
+     * Возможные коды ответа: {@link DefaultResult}
+     * @returns {@link IResponse}
+     *
+     * @example
+     * const result = await client.endpoints.notification.deleteArticleNotification(1, ...);
+     */
+    public async deleteArticleNotification(id2: number, options?: IBaseApiParams): Promise<IResponse> {
+        return await this.client.call<number, IResponse>({ path: `/notification/article/delete/${id2}`, ...options });
     }
 
     /**

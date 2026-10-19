@@ -1,5 +1,5 @@
 import { Anixart } from "../client";
-import { CheckLoginResult, DefaultResult, IBaseApiParams, ICheckLoginRequest, ICheckLoginResponse, IGoogleAuthResponse, ILoginRequest, ILoginResponse, IOAuthGoogleSignInRequest, IOAuthGoogleSignUpRequest, IOAuthTelegramSignInRequest, IOAuthTelegramSignUpRequest, IOAuthVkSignInRequest, IOAuthVkSignUpRequest, IOAuthYandexSignInRequest, IOAuthYandexSignUpRequest, IRegisterResponse, IResendRequest, IResponse, IRestoreEmailRequest, IRestoreResendRequest, IRestoreVerifyRequest, ISignUpRequest, ISignUpVerifyRequest, ITelegramAuthResponse, IVkAuthResponse, IYandexAuthResponse, LoginResult, RegisterResult, RegisterVerifyResult, RestorePasswordResult, RestorePasswordVerifyResult } from "../types";
+import { CheckLoginResult, DefaultResult, IBaseApiParams, ICheckLoginRequest, ICheckLoginResponse, IGoogleAuthResponse, ILoginRequest, ILoginResponse, IOAuthGoogleSignInRequest, IOAuthGoogleSignUpRequest, IOAuthTelegramSignInRequest, IOAuthTelegramSignUpRequest, IOAuthVkSignInRequest, IOAuthVkSignUpRequest, IOAuthYandexSignInRequest, IOAuthYandexSignUpRequest, IRegisterResponse, IResendRequest, IResponse, IRestoreEmailRequest, IRestoreResendRequest, IRestoreVerifyRequest, IRestoreVerifyResponse, ISignUpRequest, LONG_CODE_HEADER, ISignUpVerifyRequest, ITelegramAuthResponse, IVkAuthResponse, IYandexAuthResponse, LoginResult, RegisterResult, RegisterVerifyResult, RestorePasswordResult, RestorePasswordVerifyResult } from "../types";
 
 
 /**
@@ -44,7 +44,7 @@ export class Auth {
      * const result = await client.endpoints.auth.resend(...);
      */
     public async resend(data: IResendRequest, options?: IBaseApiParams): Promise<IRegisterResponse> {
-        return await this.client.call<number, IRegisterResponse>({ path: `/auth/resend`, method: 'POST', urlEncoded: data, ...options });
+        return await this.client.call<number, IRegisterResponse>({ path: `/auth/resend`, method: 'POST', urlEncoded: data, ...options, headers: { ...LONG_CODE_HEADER, ...options?.headers } });
     }
 
     /**
@@ -57,7 +57,7 @@ export class Auth {
      * const result = await client.endpoints.auth.restore(...);
      */
     public async restore(data: IRestoreEmailRequest, options?: IBaseApiParams): Promise<IRegisterResponse> {
-        return await this.client.call<number, IRegisterResponse>({ path: `/auth/restore`, method: 'POST', urlEncoded: data, resultEnum: RestorePasswordResult, ...options });
+        return await this.client.call<number, IRegisterResponse>({ path: `/auth/restore`, method: 'POST', urlEncoded: data, resultEnum: RestorePasswordResult, ...options, headers: { ...LONG_CODE_HEADER, ...options?.headers } });
     }
 
     /**
@@ -70,7 +70,7 @@ export class Auth {
      * const result = await client.endpoints.auth.restoreResend(...);
      */
     public async restoreResend(data: IRestoreResendRequest, options?: IBaseApiParams): Promise<IRegisterResponse> {
-        return await this.client.call<number, IRegisterResponse>({ path: `/auth/restore/resend`, method: 'POST', urlEncoded: data, ...options });
+        return await this.client.call<number, IRegisterResponse>({ path: `/auth/restore/resend`, method: 'POST', urlEncoded: data, ...options, headers: { ...LONG_CODE_HEADER, ...options?.headers } });
     }
 
     /**
@@ -82,8 +82,8 @@ export class Auth {
      * @example
      * const result = await client.endpoints.auth.restoreVerify(...);
      */
-    public async restoreVerify(data: IRestoreVerifyRequest, options?: IBaseApiParams): Promise<IResponse> {
-        return await this.client.call<number, IResponse>({ path: `/auth/restore/verify`, method: 'POST', urlEncoded: data, resultEnum: RestorePasswordVerifyResult, ...options });
+    public async restoreVerify(data: IRestoreVerifyRequest, options?: IBaseApiParams): Promise<IRestoreVerifyResponse> {
+        return await this.client.call<number, IRestoreVerifyResponse>({ path: `/auth/restore/verify`, method: 'POST', urlEncoded: data, resultEnum: RestorePasswordVerifyResult, ...options });
     }
 
     /**
@@ -161,7 +161,7 @@ export class Auth {
      * const result = await client.endpoints.auth.signUp(...);
      */
     public async signUp(data: ISignUpRequest, options?: IBaseApiParams): Promise<IRegisterResponse> {
-        return await this.client.call<number, IRegisterResponse>({ path: `/auth/signUp`, method: 'POST', urlEncoded: data, resultEnum: RegisterResult, ...options });
+        return await this.client.call<number, IRegisterResponse>({ path: `/auth/signUp`, method: 'POST', urlEncoded: data, resultEnum: RegisterResult, ...options, headers: { ...LONG_CODE_HEADER, ...options?.headers } });
     }
 
     /**
@@ -174,7 +174,7 @@ export class Auth {
      * const result = await client.endpoints.auth.signUpWithGoogle(...);
      */
     public async signUpWithGoogle(data: IOAuthGoogleSignUpRequest, options?: IBaseApiParams): Promise<IGoogleAuthResponse> {
-        return await this.client.call<number, IGoogleAuthResponse>({ path: `/auth/google`, method: 'POST', urlEncoded: data, ...options });
+        return await this.client.call<number, IGoogleAuthResponse>({ path: `/auth/google`, method: 'POST', urlEncoded: data, ...options, headers: { ...LONG_CODE_HEADER, ...options?.headers } });
     }
 
     /**
@@ -187,7 +187,7 @@ export class Auth {
      * const result = await client.endpoints.auth.signUpWithTelegram(...);
      */
     public async signUpWithTelegram(data: IOAuthTelegramSignUpRequest, options?: IBaseApiParams): Promise<ITelegramAuthResponse> {
-        return await this.client.call<number, ITelegramAuthResponse>({ path: `/auth/telegram`, method: 'POST', urlEncoded: data, ...options });
+        return await this.client.call<number, ITelegramAuthResponse>({ path: `/auth/telegram`, method: 'POST', urlEncoded: data, ...options, headers: { ...LONG_CODE_HEADER, ...options?.headers } });
     }
 
     /**
@@ -200,7 +200,7 @@ export class Auth {
      * const result = await client.endpoints.auth.signUpWithVk(...);
      */
     public async signUpWithVk(data: IOAuthVkSignUpRequest, options?: IBaseApiParams): Promise<IVkAuthResponse> {
-        return await this.client.call<number, IVkAuthResponse>({ path: `/auth/vk`, method: 'POST', urlEncoded: data, ...options });
+        return await this.client.call<number, IVkAuthResponse>({ path: `/auth/vk`, method: 'POST', urlEncoded: data, ...options, headers: { ...LONG_CODE_HEADER, ...options?.headers } });
     }
 
     /**
@@ -213,7 +213,7 @@ export class Auth {
      * const result = await client.endpoints.auth.signUpWithYandex({ login, email, yandexAccessToken });
      */
     public async signUpWithYandex(data: IOAuthYandexSignUpRequest, options?: IBaseApiParams): Promise<IYandexAuthResponse> {
-        return await this.client.call<number, IYandexAuthResponse>({ path: `/auth/yandex`, method: 'POST', urlEncoded: data, ...options });
+        return await this.client.call<number, IYandexAuthResponse>({ path: `/auth/yandex`, method: 'POST', urlEncoded: data, ...options, headers: { ...LONG_CODE_HEADER, ...options?.headers } });
     }
 
     /**

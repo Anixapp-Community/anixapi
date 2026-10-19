@@ -112,6 +112,10 @@ export interface IProfile {
     is_online: boolean
     roles: IRole[]
     badge: IBadge | null
+    /** Сколько значков у профиля (Anixart 10.5+) */
+    badge_count?: number
+    /** Превью значков на витрине профиля (Anixart 10.5+) */
+    badges_preview?: IBadge[] | null
     preferred_genres: IPreferredType[],
     preferred_audiences: IPreferredType[],
     preferred_themes: IPreferredType[],
@@ -214,12 +218,66 @@ export interface IFriendRequestResponse<T extends number = SendFriendRequestResu
     friend_status: T | null
 }
 
+/** Тип картинки значка */
+export enum BadgeType {
+    Static = 0,
+    Animation = 1
+}
+
+/** Редкость значка (Anixart 10.5+). Значения приходят строкой, регистр не гарантирован. */
+export type BadgeRarity = "COMMON" | "UNCOMMON" | "RARE" | "EPIC" | "LEGENDARY" | (string & {});
+
+/** Как значок был получен (`award.trigger`) */
+export enum BadgeAwardTrigger {
+    ClaimCode = "CLAIM_CODE",
+    EpisodeWatched = "EPISODE_WATCHED",
+    Manual = "MANUAL",
+    ProfileListStatus = "PROFILE_LIST_STATUS"
+}
+
+/** Обстоятельства получения значка (Anixart 10.5+) */
+export interface IBadgeAward {
+    trigger: BadgeAwardTrigger | string | null,
+    release_id?: number | null,
+    release_title?: string | null,
+    release_image?: string | null,
+    episode_name?: string | null,
+    profile_list_status?: number | null
+}
+
+/** Категория значков (Anixart 10.5+) */
+export interface IBadgeCategory {
+    id: number,
+    title: string
+}
+
+/** Раздел коллекции значков профиля (Anixart 10.5+) */
+export interface IBadgeSection {
+    id: number,
+    title: string,
+    count: number,
+    content: IBadge[]
+}
+
 export interface IBadge {
     id: number,
     name: string,
-    type: number,
+    type: BadgeType | number,
     image_url: string,
-    timestamp: number
+    timestamp: number,
+    /** Поля ниже — Anixart 10.5+ */
+    image_medium_url?: string | null,
+    image_small_url?: string | null,
+    description?: string | null,
+    rarity?: BadgeRarity | null,
+    /** Доля пользователей, у которых есть значок (0–100) */
+    ownership_percentage?: number | null,
+    category?: IBadgeCategory | null,
+    award?: IBadgeAward | null,
+    is_available?: boolean | null,
+    is_owned?: boolean,
+    is_selected?: boolean,
+    is_showcased?: boolean
 }
 
 export interface ISocialRequest {
@@ -325,7 +383,6 @@ export interface IProfileListResponse extends IResponse {}
 export interface IBlockProfileListAddResponse extends IResponse {}
 export interface IProfileEnforcementAppealResponse extends IResponse {}
 export interface IBookmarksImportStatusResponse extends IResponse {}
-export interface IAchievementResponse extends IResponse {}
 
 export interface IProfileRole {
     is_online?: boolean

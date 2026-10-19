@@ -59,7 +59,9 @@ export interface IScheduleResponse extends IResponse {
 }
 
 export interface ITypeResponse extends IResponse {
-    types: IDubber[]
+    types: IDubber[],
+    /** id популярных озвучек (Anixart 10.5+) */
+    popular_type_ids?: number[] | null
 }
 
 export interface IBaseComment {

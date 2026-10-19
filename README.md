@@ -14,7 +14,7 @@ TypeScript-обёртка над API Anixart 10.x для Node.js.
 
 Документация · [Лицензия GPL-2.0](LICENSE)
 
-`anixapi@0.3.3` · Node.js ≥ 18 · актуально под **Anixart 10.0**
+`anixapi@0.4.0` · Node.js ≥ 18 · актуально под **Anixart 10.5**
 
 ---
 
@@ -119,7 +119,7 @@ try {
 
 ## TODO
 
-- [x] Эндпоинты API 10.0
+- [x] Эндпоинты API 10.5
 - [x] OAuth: VK / Google / Telegram / Yandex
 - [x] Редактор статей (upload / embed)
 - [x] `HttpError` / `AnixartError`, таймаут и отмена

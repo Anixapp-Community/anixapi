@@ -269,6 +269,12 @@ export enum BlogCreateResult {
     ReputationLevelTooLow = 2
 }
 
+/** POST channel/delete/{c_id} (Anixart 10.5+) */
+export enum ChannelDeleteResult {
+    ChannelNotFound = 2,
+    ChannelNotOwned = 3
+}
+
 export enum ChannelCreateEditResult {
     InvalidTitle = 2,
     InvalidDescription = 3,

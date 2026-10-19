@@ -1,4 +1,4 @@
-import { IBadge, IProfile, ITheme } from "./profile";
+import { IBadge, IBadgeSection, IProfile, ITheme } from "./profile";
 import { IPageableResponse, IResponse } from "./response";
 
 
@@ -37,6 +37,54 @@ export interface IProfileSettingsResponse extends IResponse {
 
 export interface IBadgesResponse extends IPageableResponse<IBadge> {
     profile: IProfile
+}
+
+/** GET profile/{id}/badge/list (Anixart 10.5+) */
+export interface IProfileBadgeSectionsResponse extends IResponse {
+    profile?: IProfile | null,
+    total_count: number,
+    /** Значки на витрине профиля */
+    showcased?: IBadge[] | null,
+    /** Недавно полученные (для своего профиля) */
+    recent?: IBadge[] | null,
+    sections?: IBadgeSection[] | null
+}
+
+/** GET profile/preference/badge/edit/{id} (Anixart 10.5+ отдаёт выбранный значок) */
+export interface IProfileBadgeResponse extends IResponse {
+    badge?: IBadge | null
+}
+
+export enum ProfileBadgeShowcaseResult {
+    InvalidBadge = 2,
+    LimitReached = 3
+}
+
+/** Ответ pin / unpin / reorder витрины значков */
+export interface IProfileBadgeShowcaseResponse extends IResponse<ProfileBadgeShowcaseResult> {}
+
+/** POST profile/preference/badge/showcase/reorder */
+export interface IReorderBadgeShowcaseRequest {
+    ids: number[]
+}
+
+export enum AchievementResult {
+    AlreadyGranted = 2,
+    AchievementNotFound = 3,
+    ProfileNotFound = 4,
+    GrantLimitReached = 5,
+    BadgeChanged = 6
+}
+
+/** GET achievement/get/{code} */
+export interface IAchievementResponse extends IResponse<AchievementResult> {}
+
+/** GET achievement/preview/{code} */
+export interface IAchievementPreviewResponse extends IResponse {
+    achievement?: {
+        name: string,
+        badge?: IBadge | null
+    } | null
 }
 
 export interface IEmailChangeConfirmResponse extends IResponse<ChangeEmailConfirmResult> {

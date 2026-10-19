@@ -104,7 +104,10 @@ export interface ISilentPush {
 export interface IUnsupportedProfileNotification {}
 
 export enum DeleteNotificationType {
-    ArticleComment = "article/comment",
+    /** Уведомление о новой статье (Anixart 10.5+) */
+    Article = "article",
+    /** С Anixart 10.5 — `articleComment` (было `article/comment`) */
+    ArticleComment = "articleComment",
     CollectionComment = "collectionComment",
     Episode = "episode",
     Friend = "friend",

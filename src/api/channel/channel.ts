@@ -1,5 +1,5 @@
 import { Anixart } from "../../client";
-import { BlogCreateResult, ChannelBlockResult, ChannelCreateEditResult, ChannelResult, DefaultResult, EditorAvaliableResult, EmbedType, IArticle, IArticleMuteResponse, IArticleUploadFileResponse, IBaseApiParams, IChannel, IChannelBlockInfoResponse, IChannelBlockManageRequest, IChannelCreateRequest, IChannelMediaTokenResponse, IChannelPermissionManageRequest, IChannelPermissionManageResponse, IChannelPermissionsFilterRequest, IChannelProfile, IChannelResponse, IChannelSubscribeResponse, IChannelUnsubscribeResponse, IChannelUploadCoverAvatarResponse, IChannelsFilterRequest, IEditorChannelsResponse, IEmbedData, IPageableResponse, IResponse, ISubscriptionCountResponse } from "../../types";
+import { BlogCreateResult, ChannelBlockResult, ChannelCreateEditResult, ChannelDeleteResult, ChannelResult, DefaultResult, EditorAvaliableResult, EmbedType, IArticle, IArticleMuteResponse, IArticleUploadFileResponse, IBaseApiParams, IChannel, IChannelBlockInfoResponse, IChannelBlockManageRequest, IChannelCreateRequest, IChannelMediaTokenResponse, IChannelPermissionManageRequest, IChannelPermissionManageResponse, IChannelPermissionsFilterRequest, IChannelProfile, IChannelResponse, IChannelSubscribeResponse, IChannelUnsubscribeResponse, IChannelUploadCoverAvatarResponse, IChannelsFilterRequest, IEditorChannelsResponse, IEmbedData, IPageableResponse, IResponse, ISubscriptionCountResponse } from "../../types";
 
 
 /**
@@ -362,5 +362,20 @@ export class Channel {
      */
     public async generateEmbedData(type: EmbedType, mediaToken: string, link: string, options?: IBaseApiParams): Promise<IEmbedData> {
         return this.client.endpoints.article.generateEmbedData(type, mediaToken, link, options);
+    }
+
+    /**
+     * POST channel/delete/{c_id} (Anixart 10.5+)
+     *
+     * Удаляет свой канал.
+     *
+     * Возможные коды ответа: {@link DefaultResult}, {@link ChannelDeleteResult}
+     * @returns {@link IResponse}
+     *
+     * @example
+     * const result = await client.endpoints.channel.delete(1, ...);
+     */
+    public async delete(channelId: number, options?: IBaseApiParams): Promise<IResponse<ChannelDeleteResult>> {
+        return await this.client.call<number, IResponse<ChannelDeleteResult>>({ path: `/channel/delete/${channelId}`, method: 'POST', resultEnum: ChannelDeleteResult, ...options });
     }
 }

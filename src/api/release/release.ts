@@ -1,5 +1,5 @@
 import { Anixart } from "../../client";
-import { DefaultResult, IBaseApiParams, IReleaseResponse, IResponse } from "../../types";
+import { DefaultResult, IBadge, IBaseApiParams, IPageableResponse, IReleaseResponse, IResponse } from "../../types";
 
 
 /**
@@ -102,5 +102,20 @@ export class Release {
     /** @alias {@link Release.vote} */
     public async addVote(releaseId: number, vote: number, options?: IBaseApiParams): Promise<IResponse> {
         return this.vote(releaseId, vote, options);
+    }
+
+    /**
+     * GET release/{r_id}/badges/{page} (Anixart 10.5+)
+     *
+     * Значки, связанные с релизом.
+     *
+     * Возможные коды ответа: {@link DefaultResult}
+     * @returns {@link IPageableResponse}<{@link IBadge}>
+     *
+     * @example
+     * const result = await client.endpoints.release.badges(1, 0, ...);
+     */
+    public async badges(releaseId: number, page: number, options?: IBaseApiParams): Promise<IPageableResponse<IBadge>> {
+        return await this.client.call<number, IPageableResponse<IBadge>>({ path: `/release/${releaseId}/badges/${page}`, ...options });
     }
 }

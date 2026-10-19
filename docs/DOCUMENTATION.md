@@ -1,6 +1,6 @@
 # Документация AnixApi
 
-Полное руководство по установке, настройке и использованию библиотеки `anixapi` (Node.js ≥ 18). Актуально под **Anixart 10.0**.
+Полное руководство по установке, настройке и использованию библиотеки `anixapi` (Node.js ≥ 18). Актуально под **Anixart 10.5**.
 
 ---
 
@@ -128,6 +128,7 @@ await client.endpoints.profile.byId(456, {
 | `throwOnApiError` / `throwOnAnixartError` | Автоброс при `code !== 0` |
 | `successCodes` | Какие `code` считать успехом. По умолчанию `[0]` |
 | `resultEnum` | Enum для имени кода в `AnixartError.codeName` |
+| `headers` | Дополнительные заголовки только для этого запроса |
 
 Отмена и таймаут:
 
@@ -199,6 +200,8 @@ await client.endpoints.auth.verify({ login, email, password, code, hash });
 ```
 
 Проверка логина: `auth.checkLogin({ login })`. Восстановление пароля: `auth.restore`, `auth.restoreResend`, `auth.restoreVerify`.
+
+С Anixart 10.5 регистрация и восстановление (`signUp`, `signUpWith*`, `resend`, `restore`, `restoreResend`) отправляют заголовок `X-Long-Code: 1` — сервер присылает **5-значный** код. В ответе есть `code_length` (длина кода) и `code_time_left` (секунды до повторной отправки), а `restoreVerify` возвращает `attempts_left`.
 
 Флаги провайдеров: `GET config/urls` → `vk_auth_available`, `google_auth_available`, `telegram_auth_available`, `yandex_auth_available`.
 
@@ -279,7 +282,7 @@ client.endpoints
 ├── channel, article, articleComment, articleSuggestion
 ├── collection, collectionMy, collectionFavorite, collectionComment
 ├── feed, discover, search
-├── profile, profileBadge, profileBlockList, profileDeletion
+├── profile, profileBadge, achievement, profileBlockList, profileDeletion
 ├── profileFriend, profileHealth, profileList, profilePreference
 ├── profileReleaseVote, profileRoleList
 ├── release, episode, releaseComment, releaseVideo
@@ -302,6 +305,42 @@ src/api/
 ├── release/       — релизы, эпизоды, видео
 └── bookmarks/     — импорт / экспорт закладок
 ```
+
+---
+
+## Значки и достижения (Anixart 10.5)
+
+Значки стали коллекцией: у каждого есть редкость, категория, описание и история получения, а профиль показывает витрину.
+
+```typescript
+import { BadgeAwardTrigger, ProfileBadgeShowcaseResult, AchievementResult } from "anixapi";
+
+// Коллекция значков профиля: витрина, недавние, разделы по категориям
+const list = await client.endpoints.profileBadge.list(profileId);
+list.showcased; list.recent; list.sections; list.total_count;
+
+// Одна категория постранично
+const page = await client.endpoints.profileBadge.section(profileId, categoryId, 0);
+
+// Витрина своего профиля
+await client.endpoints.profileBadge.pinToShowcase(badgeId);   // code 3 — LimitReached
+await client.endpoints.profileBadge.unpinFromShowcase(badgeId);
+await client.endpoints.profileBadge.reorderShowcase([3, 1, 2]);
+
+// Значки релиза
+const badges = await client.endpoints.release.badges(releaseId, 0);
+
+// Значок по коду: сначала предпросмотр, затем активация
+const preview = await client.endpoints.achievement.preview("CODE");
+const res = await client.endpoints.achievement.claim("CODE", preview.achievement!.badge!.id);
+if (res.code === AchievementResult.AlreadyGranted) { /* ... */ }
+```
+
+Новые поля `IBadge`: `rarity` (`COMMON` … `LEGENDARY`), `description`, `category`, `award` (`trigger`: `CLAIM_CODE`, `EPISODE_WATCHED`, `MANUAL`, `PROFILE_LIST_STATUS`), `ownership_percentage`, `image_medium_url`, `image_small_url`, `is_owned`, `is_selected`, `is_showcased`, `is_available`. У профиля и релиза появились `badge_count` и `badges_preview`.
+
+`profileBadge.all()` помечен устаревшим: в 10.5 маршрута `profile/preference/badge/all/{page}` больше нет.
+
+Прочее из 10.5: `channel.delete(id)` (`ChannelDeleteResult`), `profilePreference.deleteLoginHistory()`, `notification.deleteArticleNotification(id)`; удаление уведомления о комментарии к статье переехало на `notification/articleComment/delete/{id}`; `type.types()` отдаёт `popular_type_ids`.
 
 ---
 

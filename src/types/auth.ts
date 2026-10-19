@@ -45,13 +45,24 @@ export enum RestorePasswordVerifyResult {
     InvalidHash = 6
 }
 
+/** Заголовок, с которым сервер присылает 5-значный код подтверждения (Anixart 10.5+) */
+export const LONG_CODE_HEADER = { 'X-Long-Code': '1' } as const;
+
+/** Поля экрана ввода кода (Anixart 10.5+): длина кода и секунды до повторной отправки */
+export interface ICodeInputResponse {
+    /** Длина кода: 4 по умолчанию, 5 при заголовке {@link LONG_CODE_HEADER} */
+    code_length?: number | null;
+    /** Сколько секунд осталось до возможности запросить код повторно */
+    code_time_left?: number | null;
+}
+
 export interface IRegisterRequest {
     username: string;
     password: string;
     email: string;
 }
 
-export interface IRegisterResponse<T extends number = RegisterResult> extends IResponse<T> {
+export interface IRegisterResponse<T extends number = RegisterResult> extends IResponse<T>, ICodeInputResponse {
     hash: string;
     codeTimestampExpires: number;
 }
@@ -74,6 +85,14 @@ export interface IRestoreVerifyRequest {
     password: string;
     hash: string;
     code: number;
+}
+
+/** Ответ POST auth/restore/verify */
+export interface IRestoreVerifyResponse extends IResponse<RestorePasswordVerifyResult> {
+    profile?: IProfile | null;
+    profileToken?: IProfileToken | null;
+    /** Сколько попыток ввода кода осталось (Anixart 10.5+) */
+    attempts_left?: number | null;
 }
 
 /** POST auth/signUp, auth/vk, auth/google (регистрация) */
@@ -175,7 +194,7 @@ export type VkAuthResult = OAuthAuthResult;
 export type YandexAuthResult = OAuthAuthResult;
 
 /** Базовый ответ OAuth sign-in / sign-up */
-export interface IOAuthAuthResponse<T extends number = OAuthAuthResult> extends IResponse<T> {
+export interface IOAuthAuthResponse<T extends number = OAuthAuthResult> extends IResponse<T>, ICodeInputResponse {
     profile?: IProfile;
     profileToken?: IProfileToken;
     hash?: string;

@@ -1,5 +1,5 @@
 import { IPageableResponse, IResponse, IBaseComment, CommentAddResult, IBaseCompactComment } from './response'
-import { IProfile, BookmarkType } from './profile'
+import { IProfile, BookmarkType, IBadge } from './profile'
 import { IBaseRequestPageable, IBaseSearchRequest } from './request'
 
 export enum ReleaseCategory {
@@ -178,6 +178,10 @@ export interface IRelease {
     video_banners: IVideoBanners[]
     profile_release_type_notification_preference_count: number
     is_release_type_notifications_enabled: boolean
+    /** Сколько значков связано с релизом (Anixart 10.5+) */
+    badge_count?: number
+    /** Превью значков релиза (Anixart 10.5+) */
+    badges_preview?: IBadge[] | null
 }
 
 export interface IVoteRelease {
