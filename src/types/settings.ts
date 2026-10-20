@@ -254,8 +254,9 @@ export interface ISelectThemeResponse extends IResponse {
     theme?: ITheme | null
 }
 
+
 export interface ISelectPinnedSectionRequest {
-    section: number
+    id: number
 }
 
 export interface IChangeEmailResponse extends IResponse<ChangeEmailResult> {
