@@ -193,14 +193,16 @@ export class Channel {
     /**
      * GET channel/editor/available/all
      *
+     * Query: `only_subscribed`
+     *
      * Возможные коды ответа: {@link DefaultResult}
      * @returns {@link IEditorChannelsResponse}
      *
      * @example
-     * const result = await client.endpoints.channel.editorAvailableAll(...);
+     * const result = await client.endpoints.channel.editorAvailableAll({ only_subscribed: true });
      */
-    public async editorAvailableAll(options?: IBaseApiParams): Promise<IEditorChannelsResponse> {
-        return await this.client.call<number, IEditorChannelsResponse>({ path: `/channel/editor/available/all`, ...options });
+    public async editorAvailableAll(query?: { only_subscribed?: boolean } & Record<string, string | number | boolean | undefined>, options?: IBaseApiParams): Promise<IEditorChannelsResponse> {
+        return await this.client.call<number, IEditorChannelsResponse>({ path: `/channel/editor/available/all`, queryParams: query, ...options });
     }
 
     /**
@@ -345,7 +347,7 @@ export class Channel {
 
     /** @alias {@link Channel.editorAvailableAll} */
     public async editorAvaliableChannels(options?: IBaseApiParams): Promise<IEditorChannelsResponse> {
-        return this.editorAvailableAll(options);
+        return this.editorAvailableAll(undefined, options);
     }
 
     /**

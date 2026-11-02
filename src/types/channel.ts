@@ -8,6 +8,10 @@ export interface IChannel {
     description: string,
     avatar: string,
     cover: string,
+    /** Anixart 11+, анимированная версия изображения (может отсутствовать) */
+    avatar_animation?: string | null,
+    /** Anixart 11+, анимированная версия изображения (может отсутствовать) */
+    cover_animation?: string | null,
     permission: number,
     article_count: number,
     subscriber_count: number,
@@ -45,7 +49,12 @@ export interface IChannelCreateRequest {
     title: string,
     description: string,
     is_article_suggestion_enabled: boolean,
-    is_commenting_enabled: boolean
+    is_commenting_enabled: boolean,
+    /** Виджет канала на странице эпизода */
+    is_episode_channel_widget_enabled?: boolean | null,
+    episode_channel_widget_article_count?: number | null,
+    episode_channel_widget_popularity_period?: number | null,
+    episode_channel_widget_sort?: number | null
 }
 
 export interface ISubsciptionCountResponse extends IResponse {

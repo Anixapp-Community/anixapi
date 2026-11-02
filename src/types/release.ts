@@ -57,6 +57,8 @@ export interface IReleaseFilterRequest {
     episodes_from?: number
     episodes_to?: number
     is_genres_exclude_mode_enabled?: boolean
+    /** Режим сочетания жанров (`FilterRequest.genresMode`) */
+    genres_mode?: number
     season?: number
     start_year?: number
     status_id?: number
@@ -92,6 +94,8 @@ export interface IRelated {
     id: number,
     image: string,
     images: string[],
+    /** Anixart 11+, анимированная версия изображения (может отсутствовать) */
+    cover_animation?: string | null,
     name: string,
     name_ru: string,
     release_count: number
@@ -111,6 +115,8 @@ export interface IRelease {
     id: number
     poster: string
     image: string
+    /** Anixart 11+, анимированная версия изображения (может отсутствовать) */
+    poster_animation?: string | null
     year: string
     genres: string
     country: string
@@ -171,6 +177,8 @@ export interface IRelease {
     is_favorite: boolean
     is_view_blocked: boolean
     screenshot_images: string[]
+    /** Anixart 11+, анимированные скриншоты */
+    screenshot_animations?: string[] | null
     related_releases: IRelease[]
     recommended_releases: IRelease[]
     episode_last_update: IEpisodeLastUpdate
@@ -393,7 +401,9 @@ export interface IReleaseComment extends ICommentRelease {
 export interface IInteresting {
     id: number,
     is_hidden: boolean,
-    type: number
+    type: number,
+    /** Anixart 11+, анимированная версия изображения (может отсутствовать) */
+    image_animation?: string | null
 }
 
 export interface IReleaseStreamingPlatform {

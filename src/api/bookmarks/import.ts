@@ -1,5 +1,5 @@
 import { Anixart } from "../../client";
-import { DefaultResult, IBaseApiParams, IBookmarksImportRequest, IBookmarksImportStatusResponse, IResponse } from "../../types";
+import { BookmarksImportResult, IBaseApiParams, IBookmarksImportRequest, IBookmarksImportResponse, IBookmarksImportStatusResponse } from "../../types";
 
 
 /**
@@ -11,20 +11,23 @@ export class Import {
     /**
      * POST import/bookmarks
      *
-     * Возможные коды ответа: {@link DefaultResult}
-     * @returns {@link IResponse}
+     * Возможные коды ответа: {@link BookmarksImportResult}
+     * @returns {@link IBookmarksImportResponse}
      *
      * @example
-     * const result = await client.endpoints.import.bookmarks(...);
+     * const result = await client.endpoints.import.bookmarks({
+     *     selected_importer_name: "Shikimori",
+     *     watching: [1, 2], plans: [], completed: [3], holdOn: [], dropped: []
+     * });
      */
-    public async bookmarks(body: IBookmarksImportRequest, options?: IBaseApiParams): Promise<IResponse> {
-        return await this.client.call<number, IResponse>({ path: `/import/bookmarks`, method: 'POST', json: body, ...options });
+    public async bookmarks(body: IBookmarksImportRequest, options?: IBaseApiParams): Promise<IBookmarksImportResponse> {
+        return await this.client.call<number, IBookmarksImportResponse>({ path: `/import/bookmarks`, method: 'POST', json: body, resultEnum: BookmarksImportResult, ...options });
     }
 
     /**
      * POST import/status
      *
-     * Возможные коды ответа: {@link DefaultResult}
+     * Возможные коды ответа: {@link BookmarksImportResult}
      * @returns {@link IBookmarksImportStatusResponse}
      *
      * @example

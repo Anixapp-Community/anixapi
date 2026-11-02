@@ -1,5 +1,5 @@
 import { Anixart } from "../client";
-import { BookmarkType, IBaseCommentAddRequest, ICommentRelease, ICommentReleaseResponse, IEpisodeLastUpdate, IRelated, IRelease, IReleaseCategory, IReleaseStatus, IVideoBanners, DefaultResult, Writable, ReleaseAddCollectionResult, IEpisode, IPageableResponse, ICollection, ITypeResponse } from "../types";
+import { BookmarkType, FavoriteResult, IBaseCommentAddRequest, ICommentRelease, ICommentReleaseResponse, IEpisodeLastUpdate, IRelated, IRelease, IReleaseCategory, IReleaseStatus, IVideoBanners, DefaultResult, Writable, ReleaseAddCollectionResult, IEpisode, IPageableResponse, ICollection, ITypeResponse } from "../types";
 import { Collection } from "./Collection";
 import { Dubber } from "./Dubber";
 import { ReleaseComment } from "./ReleaseComment";
@@ -165,7 +165,7 @@ export class Release {
         return request.code;
     }
 
-    public async setFavorite(favorite: boolean): Promise<DefaultResult> {
+    public async setFavorite(favorite: boolean): Promise<DefaultResult | FavoriteResult> {
         const request = favorite ?
         await this.client.endpoints.favorite.add(this.id) :
         await this.client.endpoints.favorite.delete(this.id);

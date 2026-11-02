@@ -1,5 +1,6 @@
 import { Anixart } from "../../client";
 import { CommentAddResult, CommentDeleteResult, CommentEditResult, DefaultResult, IBaseApiParams, IBaseCommentAddRequest, ICollectionComment, ICollectionCommentAddResponse, ICommentEditRequest, ICommentProcessRequest, IPageableResponse, IProfile, IResponse } from "../../types";
+import { Utils } from "../../utils/Utils";
 
 
 /**
@@ -18,7 +19,7 @@ export class CollectionComment {
      * const result = await client.endpoints.collectionComment.add(1, ...);
      */
     public async add(collectionId: number, body: IBaseCommentAddRequest, options?: IBaseApiParams): Promise<ICollectionCommentAddResponse> {
-        return await this.client.call<number, ICollectionCommentAddResponse>({ path: `/collection/comment/add/${collectionId}`, method: 'POST', json: body, ...options });
+        return await this.client.call<number, ICollectionCommentAddResponse>({ path: `/collection/comment/add/${collectionId}`, method: 'POST', json: Utils.commentAddBody(body), ...options });
     }
 
     /**

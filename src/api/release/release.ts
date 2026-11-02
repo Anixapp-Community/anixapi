@@ -87,6 +87,21 @@ export class Release {
     }
 
     /**
+     * GET release/{r_id}/continue (Anixart 11+)
+     *
+     * Релиз для блока «Продолжить просмотр» (вызывается для последнего просмотренного релиза)
+     *
+     * Возможные коды ответа: {@link DefaultResult}
+     * @returns {@link IReleaseResponse}
+     *
+     * @example
+     * const result = await client.endpoints.release.continueWatching(1);
+     */
+    public async continueWatching(releaseId: number, options?: IBaseApiParams): Promise<IReleaseResponse> {
+        return await this.client.call<number, IReleaseResponse>({ path: `/release/${releaseId}/continue`, ...options });
+    }
+
+    /**
      * GET release/vote/add/{r_id}/{vote}
      *
      * Возможные коды ответа: {@link DefaultResult}

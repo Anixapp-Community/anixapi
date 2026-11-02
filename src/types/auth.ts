@@ -271,3 +271,69 @@ export interface IUserResponse extends IResponse {
     id?: number,
     is_sponsor?: boolean
 }
+/**
+ * Коды ответа QR-входа (Anixart 11+, `QrAuthResponse`)
+ *
+ * `code` в ответе — результат запроса, а состояние сессии лежит в {@link IQrAuthResponse.status} ({@link QrAuthStatus}).
+ */
+export enum QrAuthResult {
+    Expired = 2,
+    Declined = 3,
+    TooManyAttempts = 4,
+    PinInvalid = 5,
+    TooManyRequests = 6
+}
+
+/** Состояние QR-сессии в {@link IQrAuthResponse.status} */
+export enum QrAuthStatus {
+    /** QR ещё не отсканирован */
+    Waiting = 0,
+    /** QR отсканирован, ждём подтверждения PIN-кодом */
+    Scanned = 1,
+    /** Вход подтверждён: в ответе `profile` и `profileToken` */
+    Confirmed = 2
+}
+
+/** POST auth/qr/create — устройство, на котором выполняется вход */
+export interface IQrAuthCreateRequest {
+    /** Название устройства, его видит пользователь при подтверждении */
+    device: string
+}
+
+/** POST auth/qr/status — опрос сессии с устройства, на котором выполняется вход */
+export interface IQrAuthStatusRequest {
+    key: string,
+    secret: string
+}
+
+/** POST auth/qr/confirm — подтверждение входа с авторизованного устройства */
+export interface IQrAuthConfirmRequest {
+    key: string,
+    /** PIN-код, показанный на устройстве, где выполняется вход */
+    pin: string
+}
+
+/**
+ * Ответ всех эндпоинтов auth/qr/* (Anixart 11+)
+ *
+ * Приложение принимает в QR ссылку вида `https://anixart-app.com/sign-in/qr?key={key}` (или deep link `…://sign-in/qr?key={key}`).
+ */
+export interface IQrAuthResponse extends IResponse<QrAuthResult> {
+    key?: string | null,
+    /** Секрет сессии из ответа `auth/qr/create`; нужен для `auth/qr/status` */
+    secret?: string | null,
+    /** PIN-код, который устройство показывает рядом с QR */
+    pin?: string | null,
+    /** Время жизни сессии в секундах */
+    expires_in?: number | null,
+    /** Рекомендуемый интервал опроса `auth/qr/status` в секундах */
+    poll_interval?: number | null,
+    status?: QrAuthStatus | null,
+    device?: string | null,
+    country_code?: string | null,
+    attempts_left?: number | null,
+    /** Только при {@link QrAuthStatus.Confirmed} */
+    profile?: IProfile | null,
+    /** Только при {@link QrAuthStatus.Confirmed} */
+    profileToken?: IProfileToken | null
+}

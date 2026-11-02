@@ -1,5 +1,5 @@
 import { Anixart } from "../../client";
-import { DefaultResult, IBaseApiParams, IPageableResponse, IProfileListResponse, IRelease, IResponse } from "../../types";
+import { DefaultResult, IBaseApiParams, IPageableResponse, IProfileListQuery, IProfileListResponse, IRelease, IResponse, ProfileListAnnounceFilter } from "../../types";
 
 
 /**
@@ -37,18 +37,22 @@ export class ProfileList {
     /**
      * GET profile/list/all/{status}/{page}
      *
+     * Query: `sort`, `filter_announce` ({@link ProfileListAnnounceFilter})
+     *
      * Возможные коды ответа: {@link DefaultResult}
      * @returns {@link IPageableResponse}
      *
      * @example
      * const result = await client.endpoints.profileList.profileList(1, 1, ...);
      */
-    public async profileList(status: number, page: number, query?: Record<string, string | number | boolean | undefined>, options?: IBaseApiParams): Promise<IPageableResponse<IRelease>> {
+    public async profileList(status: number, page: number, query?: IProfileListQuery & Record<string, string | number | boolean | undefined>, options?: IBaseApiParams): Promise<IPageableResponse<IRelease>> {
         return await this.client.call<number, IPageableResponse<IRelease>>({ path: `/profile/list/all/${status}/${page}`, queryParams: query, ...options });
     }
 
     /**
      * GET profile/list/all/{p_id}/{status}/{page}
+     *
+     * Query: `sort`, `filter_announce` ({@link ProfileListAnnounceFilter})
      *
      * Возможные коды ответа: {@link DefaultResult}
      * @returns {@link IPageableResponse}
@@ -56,17 +60,17 @@ export class ProfileList {
      * @example
      * const result = await client.endpoints.profileList.profileListByProfile(1, 1, 1, ...);
      */
-    public async profileListByProfile(profileId: number, status: number, page: number, query?: Record<string, string | number | boolean | undefined>, options?: IBaseApiParams): Promise<IPageableResponse<IRelease>> {
+    public async profileListByProfile(profileId: number, status: number, page: number, query?: IProfileListQuery & Record<string, string | number | boolean | undefined>, options?: IBaseApiParams): Promise<IPageableResponse<IRelease>> {
         return await this.client.call<number, IPageableResponse<IRelease>>({ path: `/profile/list/all/${profileId}/${status}/${page}`, queryParams: query, ...options });
     }
 
     /** @alias {@link ProfileList.profileList} */
-    public async get(status: number, page: number, query?: Record<string, string | number | boolean | undefined>, options?: IBaseApiParams): Promise<IPageableResponse<IRelease>> {
+    public async get(status: number, page: number, query?: IProfileListQuery & Record<string, string | number | boolean | undefined>, options?: IBaseApiParams): Promise<IPageableResponse<IRelease>> {
         return this.profileList(status, page, query, options);
     }
 
     /** @alias {@link ProfileList.profileListByProfile} */
-    public async getByProfile(profileId: number, status: number, page: number, query?: Record<string, string | number | boolean | undefined>, options?: IBaseApiParams): Promise<IPageableResponse<IRelease>> {
+    public async getByProfile(profileId: number, status: number, page: number, query?: IProfileListQuery & Record<string, string | number | boolean | undefined>, options?: IBaseApiParams): Promise<IPageableResponse<IRelease>> {
         return this.profileListByProfile(profileId, status, page, query, options);
     }
 }

@@ -43,6 +43,8 @@ export interface IProfile {
     id: number
     login: string
     avatar: string
+    /** Anixart 11+, анимированная версия изображения (может отсутствовать) */
+    avatar_animation?: string | null
     status: string
     sponsorshipExpires: number
     history: IRelease[]
@@ -163,6 +165,8 @@ export interface IProfileShort {
     id: number,
     login: string,
     avatar: string,
+    /** Anixart 11+, анимированная версия изображения (может отсутствовать) */
+    avatar_animation?: string | null,
     ban_expires: number,
     ban_reason: string,
     privilege_level: number,
@@ -208,6 +212,10 @@ export interface IProfileInfoResponse extends IResponse {
     sponsorship_expires: number;
     is_sponsor: boolean;
     is_perm_banned: boolean;
+    /** Anixart 11+ */
+    is_banned?: boolean;
+    /** Anixart 11+ */
+    ban_expires?: number;
 }
 
 export interface IFriendsRequest extends IBaseRequestPageable {
@@ -382,7 +390,13 @@ export interface IProfileSocialResponse extends IResponse {
 export interface IProfileListResponse extends IResponse {}
 export interface IBlockProfileListAddResponse extends IResponse {}
 export interface IProfileEnforcementAppealResponse extends IResponse {}
-export interface IBookmarksImportStatusResponse extends IResponse {}
+/** Коды import/bookmarks и import/status */
+export enum BookmarksImportResult {
+    ImportLimitReached = 2
+}
+
+export interface IBookmarksImportResponse extends IResponse<BookmarksImportResult> {}
+export interface IBookmarksImportStatusResponse extends IResponse<BookmarksImportResult> {}
 
 export interface IProfileRole {
     is_online?: boolean

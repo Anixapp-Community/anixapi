@@ -1,5 +1,6 @@
 import { Anixart } from "../../client";
 import { CommentAddResult, CommentDeleteResult, CommentEditResult, DefaultResult, IBaseApiParams, IBaseCommentAddRequest, ICommentEditRequest, ICommentProcessRequest, ICommentReleaseResponse, IPageableResponse, IProfileShort, IReleaseComment, IResponse } from "../../types";
+import { Utils } from "../../utils/Utils";
 
 
 /**
@@ -18,7 +19,7 @@ export class ReleaseComment {
      * const result = await client.endpoints.releaseComment.add(1, ...);
      */
     public async add(releaseId: number, body: IBaseCommentAddRequest, options?: IBaseApiParams): Promise<ICommentReleaseResponse> {
-        return await this.client.call<number, ICommentReleaseResponse>({ path: `/release/comment/add/${releaseId}`, method: 'POST', json: body, ...options });
+        return await this.client.call<number, ICommentReleaseResponse>({ path: `/release/comment/add/${releaseId}`, method: 'POST', json: Utils.commentAddBody(body), ...options });
     }
 
     /**

@@ -152,6 +152,21 @@ export class Search {
     }
 
     /**
+     * POST search/profile/friends/{p_id}/{page} (Anixart 11+)
+     *
+     * Поиск по друзьям профиля
+     *
+     * Возможные коды ответа: {@link DefaultResult}
+     * @returns {@link IPageableResponse}
+     *
+     * @example
+     * const result = await client.endpoints.search.profileFriendSearch(1, 0, { query: "name", searchBy: 0, page: 0 });
+     */
+    public async profileFriendSearch(profileId: number, page: number, body: IBaseSearchRequest, options?: IBaseApiParams): Promise<IPageableResponse<IProfile>> {
+        return await this.client.call<number, IPageableResponse<IProfile>>({ path: `/search/profile/friends/${profileId}/${page}`, method: 'POST', json: body, ...options });
+    }
+
+    /**
      * POST search/releases/{page}
      *
      * Возможные коды ответа: {@link DefaultResult}

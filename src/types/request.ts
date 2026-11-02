@@ -50,7 +50,10 @@ export interface IBaseCommentAddRequest {
     parentCommentId?: number | null,
     replyToProfileId?: number | null,
     message: string,
-    isSpoiler: boolean
+    /** JSON-имя в приложении (`CommentAddRequest.spoiler`) */
+    spoiler?: boolean,
+    /** @deprecated сервер ждёт {@link IBaseCommentAddRequest.spoiler}; оставлено для совместимости */
+    isSpoiler?: boolean
 }
 
 export interface ICommentEditRequest {
@@ -62,8 +65,9 @@ export interface ICommentProcessRequest {
     is_banned?: boolean,
     is_deleted?: boolean,
     is_spoiler?: boolean,
-    ban_expires?: number,
-    ban_reason?: string,
+    /** В приложении без `@JsonProperty` → camelCase */
+    banExpires?: number,
+    banReason?: string,
     message?: string,
     reason?: string
 }
@@ -82,17 +86,56 @@ export interface IArticleSuggestionsFilterRequest {
     channel_id?: number
 }
 
+/**
+ * POST export/bookmarks (`BookmarksExportRequest`)
+ *
+ * Сортировка передаётся query-параметром `sort` ({@link BookmarksExportSort}).
+ * Формат файла (CSV/TXT) и дополнительные колонки приложение собирает само из `releases` ответа —
+ * на сервер они не отправляются (см. {@link BookmarksExportType}, {@link BookmarksExportExtraField}).
+ */
 export interface IBookmarksExportRequest {
-    bookmarks_export_profile_lists?: IList
+    /** Списки для экспорта: 0 — избранное, 1 — смотрю, 2 — в планах, 3 — просмотрено, 4 — отложено, 5 — брошено */
+    bookmarksExportProfileLists: number[]
 }
 
+/**
+ * POST import/bookmarks (`BookmarksImportRequest`)
+ *
+ * Поля — массивы id релизов Anixart. Имена в JSON — Java-имена (Jackson),
+ * кроме `selected_importer_name`.
+ */
 export interface IBookmarksImportRequest {
-    selected_importer_name?: string,
-    completed?: number,
-    dropped?: number,
-    hold_on?: number,
-    plans?: number,
-    watching?: number
+    /** Имя источника импорта (например `"Shikimori"`) */
+    selected_importer_name: string,
+    watching: number[],
+    plans: number[],
+    completed: number[],
+    holdOn: number[],
+    dropped: number[]
+}
+
+/** Query `sort` для POST export/bookmarks */
+export enum BookmarksExportSort {
+    Title = 0,
+    Status = 1,
+    Vote = 2
+}
+
+/** Формат файла экспорта (только на клиенте, в запрос не входит) */
+export enum BookmarksExportType {
+    /** CSV: колонки через `,`, первая строка — заголовок */
+    Csv = 0,
+    /** TXT: колонки через ` / `, без заголовка */
+    Txt = 1
+}
+
+/** Дополнительные колонки экспорта (только на клиенте, в запрос не входят) */
+export enum BookmarksExportExtraField {
+    TitleOriginal = 0,
+    TitleAlt = 1,
+    /** «В избранном» + статус закладки */
+    FavoriteAndStatus = 2,
+    YourVote = 3
 }
 
 export interface IChannelPermissionsFilterRequest {
@@ -142,16 +185,18 @@ export interface IProfileEnforcementAppealRequest {
 
 export interface IProfileProcessRequest {
     is_banned?: boolean,
-    ban_expires?: number,
-    ban_reason?: string
+    /** В приложении без `@JsonProperty` → camelCase */
+    banExpires?: number,
+    banReason?: string
 }
 
+/** POST profile/preference/social/edit — в приложении поля без `@JsonProperty` → camelCase */
 export interface ISocialPagesEditRequest {
-    discord_page?: string,
-    inst_page?: string,
-    tg_page?: string,
-    tt_page?: string,
-    vk_page?: string
+    discordPage?: string,
+    instPage?: string,
+    tgPage?: string,
+    ttPage?: string,
+    vkPage?: string
 }
 
 export interface IStatusEditRequest {
@@ -163,11 +208,33 @@ export interface IReleaseReportRequest {
     reason?: number
 }
 
+/** POST release/video/appeal/add — в приложении поля без `@JsonProperty` → camelCase */
 export interface IReleaseVideoAppealRequest {
-    category_id?: number,
-    release_id?: number,
+    categoryId?: number,
+    releaseId?: number,
     title?: string,
     url?: string
+}
+
+/** POST profile/deletion/request (form) */
+export interface IProfileDeletionRequest {
+    password: string
+}
+
+/** Query для GET profile/list/all/... */
+export interface IProfileListQuery {
+    sort?: number,
+    /** {@link ProfileListAnnounceFilter} */
+    filter_announce?: number
+}
+
+/** Query `filter_announce` в GET profile/list/all/... */
+export enum ProfileListAnnounceFilter {
+    All = 0,
+    /** Только анонсы */
+    OnlyAnnounce = 1,
+    /** Без анонсов */
+    ExcludeAnnounce = 2
 }
 
 export interface IReportRequest {

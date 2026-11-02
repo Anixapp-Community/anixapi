@@ -10,6 +10,8 @@ export interface ICollection {
     title: string;
     description: string;
     image: string;
+    /** Anixart 11+, анимированная версия изображения (может отсутствовать) */
+    cover_animation?: string | null;
     creation_date: number;
     last_update_date: number;
     comment_count: number;

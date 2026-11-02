@@ -99,7 +99,13 @@ export interface ICommentAddResponse extends IResponse<CommentAddResult> {
 
 export interface ICommentReportResponse extends IResponse {}
 export interface ICommentVoteResponse extends IResponse {}
-export interface IFavoritesResponse extends IResponse {}
+/** Коды favorite/add и favorite/delete (`FavoritesResponse`, Anixart 11+) */
+export enum FavoriteResult {
+    ReleaseNotFound = 2,
+    ReleaseAlreadyInFavorite = 3
+}
+
+export interface IFavoritesResponse extends IResponse<FavoriteResult> {}
 export interface IHistoryResponse extends IResponse {}
 export interface IReportResponse extends IResponse {}
 

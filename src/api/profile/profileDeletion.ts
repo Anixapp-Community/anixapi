@@ -1,5 +1,5 @@
 import { Anixart } from "../../client";
-import { DefaultResult, IBaseApiParams, IResponse } from "../../types";
+import { DefaultResult, IBaseApiParams, IProfileDeletionRequest, IResponse } from "../../types";
 
 
 /**
@@ -24,14 +24,16 @@ export class ProfileDeletion {
     /**
      * POST profile/deletion/request
      *
+     * Пароль уходит form-полем `password` (`@FormUrlEncoded` в приложении).
+     *
      * Возможные коды ответа: {@link DefaultResult}
      * @returns {@link IResponse}
      *
      * @example
-     * const result = await client.endpoints.profileDeletion.request(...);
+     * const result = await client.endpoints.profileDeletion.request({ password: "..." });
      */
-    public async request(query?: Record<string, string | number | boolean | undefined>, options?: IBaseApiParams): Promise<IResponse> {
-        return await this.client.call<number, IResponse>({ path: `/profile/deletion/request`, method: 'POST', queryParams: query, ...options });
+    public async request(data: IProfileDeletionRequest, options?: IBaseApiParams): Promise<IResponse> {
+        return await this.client.call<number, IResponse>({ path: `/profile/deletion/request`, method: 'POST', urlEncoded: data, ...options });
     }
 
     /**

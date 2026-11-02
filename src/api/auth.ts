@@ -1,5 +1,5 @@
 import { Anixart } from "../client";
-import { CheckLoginResult, DefaultResult, IBaseApiParams, ICheckLoginRequest, ICheckLoginResponse, IGoogleAuthResponse, ILoginRequest, ILoginResponse, IOAuthGoogleSignInRequest, IOAuthGoogleSignUpRequest, IOAuthTelegramSignInRequest, IOAuthTelegramSignUpRequest, IOAuthVkSignInRequest, IOAuthVkSignUpRequest, IOAuthYandexSignInRequest, IOAuthYandexSignUpRequest, IRegisterResponse, IResendRequest, IResponse, IRestoreEmailRequest, IRestoreResendRequest, IRestoreVerifyRequest, IRestoreVerifyResponse, ISignUpRequest, LONG_CODE_HEADER, ISignUpVerifyRequest, ITelegramAuthResponse, IVkAuthResponse, IYandexAuthResponse, LoginResult, RegisterResult, RegisterVerifyResult, RestorePasswordResult, RestorePasswordVerifyResult } from "../types";
+import { CheckLoginResult, DefaultResult, IBaseApiParams, ICheckLoginRequest, ICheckLoginResponse, IGoogleAuthResponse, ILoginRequest, ILoginResponse, IOAuthGoogleSignInRequest, IOAuthGoogleSignUpRequest, IOAuthTelegramSignInRequest, IOAuthTelegramSignUpRequest, IOAuthVkSignInRequest, IOAuthVkSignUpRequest, IOAuthYandexSignInRequest, IOAuthYandexSignUpRequest, IQrAuthConfirmRequest, IQrAuthCreateRequest, IQrAuthResponse, IQrAuthStatusRequest, IRegisterResponse, IResendRequest, IResponse, IRestoreEmailRequest, IRestoreResendRequest, IRestoreVerifyRequest, IRestoreVerifyResponse, ISignUpRequest, LONG_CODE_HEADER, ISignUpVerifyRequest, ITelegramAuthResponse, IVkAuthResponse, IYandexAuthResponse, LoginResult, QrAuthResult, RegisterResult, RegisterVerifyResult, RestorePasswordResult, RestorePasswordVerifyResult } from "../types";
 
 
 /**
@@ -32,6 +32,83 @@ export class Auth {
      */
     public async firebase(options?: IBaseApiParams): Promise<IResponse> {
         return await this.client.call<number, IResponse>({ path: `/auth/firebase`, method: 'POST', ...options });
+    }
+
+    /**
+     * POST auth/qr/create (Anixart 11+)
+     *
+     * Создаёт QR-сессию на устройстве, где выполняется вход. Токен не нужен.
+     *
+     * Возможные коды ответа: {@link QrAuthResult}
+     * @returns {@link IQrAuthResponse}
+     *
+     * @example
+     * const { key, secret, pin } = await client.endpoints.auth.qrCreate({ device: "AnixApp (Windows)" });
+     */
+    public async qrCreate(data: IQrAuthCreateRequest, options?: IBaseApiParams): Promise<IQrAuthResponse> {
+        return await this.client.call<number, IQrAuthResponse>({ path: `/auth/qr/create`, method: 'POST', urlEncoded: data, resultEnum: QrAuthResult, ...options });
+    }
+
+    /**
+     * POST auth/qr/status (Anixart 11+)
+     *
+     * Опрос QR-сессии с устройства, где выполняется вход (каждые `poll_interval` секунд).
+     * При `status` = {@link QrAuthStatus.Confirmed} в ответе приходят `profile` и `profileToken`.
+     *
+     * Возможные коды ответа: {@link QrAuthResult}
+     * @returns {@link IQrAuthResponse}
+     *
+     * @example
+     * const result = await client.endpoints.auth.qrStatus({ key, secret });
+     */
+    public async qrStatus(data: IQrAuthStatusRequest, options?: IBaseApiParams): Promise<IQrAuthResponse> {
+        return await this.client.call<number, IQrAuthResponse>({ path: `/auth/qr/status`, method: 'POST', urlEncoded: data, resultEnum: QrAuthResult, ...options });
+    }
+
+    /**
+     * POST auth/qr/open (Anixart 11+)
+     *
+     * Авторизованное устройство открыло QR: сессия переходит в {@link QrAuthStatus.Scanned},
+     * в ответе `device` и `country_code` устройства, где выполняется вход.
+     *
+     * Возможные коды ответа: {@link QrAuthResult}
+     * @returns {@link IQrAuthResponse}
+     *
+     * @example
+     * const result = await client.endpoints.auth.qrOpen(key);
+     */
+    public async qrOpen(key: string, options?: IBaseApiParams): Promise<IQrAuthResponse> {
+        return await this.client.call<number, IQrAuthResponse>({ path: `/auth/qr/open`, method: 'POST', urlEncoded: { key }, resultEnum: QrAuthResult, ...options });
+    }
+
+    /**
+     * POST auth/qr/confirm (Anixart 11+)
+     *
+     * Подтверждение входа PIN-кодом с авторизованного устройства.
+     *
+     * Возможные коды ответа: {@link QrAuthResult}
+     * @returns {@link IQrAuthResponse}
+     *
+     * @example
+     * const result = await client.endpoints.auth.qrConfirm({ key, pin: "1234" });
+     */
+    public async qrConfirm(data: IQrAuthConfirmRequest, options?: IBaseApiParams): Promise<IQrAuthResponse> {
+        return await this.client.call<number, IQrAuthResponse>({ path: `/auth/qr/confirm`, method: 'POST', urlEncoded: data, resultEnum: QrAuthResult, ...options });
+    }
+
+    /**
+     * POST auth/qr/decline (Anixart 11+)
+     *
+     * Отклонение входа с авторизованного устройства.
+     *
+     * Возможные коды ответа: {@link QrAuthResult}
+     * @returns {@link IQrAuthResponse}
+     *
+     * @example
+     * const result = await client.endpoints.auth.qrDecline(key);
+     */
+    public async qrDecline(key: string, options?: IBaseApiParams): Promise<IQrAuthResponse> {
+        return await this.client.call<number, IQrAuthResponse>({ path: `/auth/qr/decline`, method: 'POST', urlEncoded: { key }, resultEnum: QrAuthResult, ...options });
     }
 
     /**

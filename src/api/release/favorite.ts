@@ -1,5 +1,5 @@
 import { Anixart } from "../../client";
-import { DefaultResult, IBaseApiParams, IFavoritesResponse, IPageableResponse, IRelease, IResponse } from "../../types";
+import { DefaultResult, FavoriteResult, IBaseApiParams, IFavoritesResponse, IPageableResponse, IProfileListQuery, IRelease, IResponse, ProfileListAnnounceFilter } from "../../types";
 
 
 /**
@@ -11,7 +11,7 @@ export class Favorite {
     /**
      * GET favorite/add/{r_id}
      *
-     * Возможные коды ответа: {@link DefaultResult}
+     * Возможные коды ответа: {@link FavoriteResult}
      * @returns {@link IFavoritesResponse}
      *
      * @example
@@ -24,7 +24,7 @@ export class Favorite {
     /**
      * GET favorite/delete/{r_id}
      *
-     * Возможные коды ответа: {@link DefaultResult}
+     * Возможные коды ответа: {@link FavoriteResult}
      * @returns {@link IFavoritesResponse}
      *
      * @example
@@ -37,13 +37,15 @@ export class Favorite {
     /**
      * GET favorite/all/{page}
      *
+     * Query: `sort`, `filter_announce` ({@link ProfileListAnnounceFilter})
+     *
      * Возможные коды ответа: {@link DefaultResult}
      * @returns {@link IPageableResponse}
      *
      * @example
      * const result = await client.endpoints.favorite.favorites(1, ...);
      */
-    public async favorites(page: number, query?: Record<string, string | number | boolean | undefined>, options?: IBaseApiParams): Promise<IPageableResponse<IRelease>> {
+    public async favorites(page: number, query?: IProfileListQuery & Record<string, string | number | boolean | undefined>, options?: IBaseApiParams): Promise<IPageableResponse<IRelease>> {
         return await this.client.call<number, IPageableResponse<IRelease>>({ path: `/favorite/all/${page}`, queryParams: query, ...options });
     }
 }
