@@ -101,11 +101,12 @@ export interface IBookmarksExportRequest {
 /**
  * POST import/bookmarks (`BookmarksImportRequest`)
  *
- * Поля — массивы id релизов Anixart. Имена в JSON — Java-имена (Jackson),
+ * Поля — массивы id тайтлов в сервисе-источнике (для Shikimori — `target_id` из JSON-выгрузки),
+ * сопоставление с релизами Anixart делает сервер. Имена в JSON — Java-имена (Jackson),
  * кроме `selected_importer_name`.
  */
 export interface IBookmarksImportRequest {
-    /** Имя источника импорта (например `"Shikimori"`) */
+    /** Имя источника импорта; в приложении есть только `"Shikimori"` */
     selected_importer_name: string,
     watching: number[],
     plans: number[],
