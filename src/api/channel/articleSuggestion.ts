@@ -11,6 +11,8 @@ export class ArticleSuggestion {
     /**
      * GET article/suggestion/{a_id}
      *
+     * @deprecated Удалён в Anixart 11 BETA 3 — используйте {@link ArticleSuggestion.articleSuggestions}.
+     *
      * Возможные коды ответа: {@link ArticleResult}
      * @returns {@link IArticleResponse}
      *

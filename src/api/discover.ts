@@ -27,6 +27,8 @@ export class Discover {
     /**
      * POST discover/comments
      *
+     * @deprecated Удалён в Anixart 11 BETA 3 — используйте {@link Discover.hub} (`comments`).
+     *
      * Возможные коды ответа: {@link DefaultResult}
      * @returns {@link IPageableResponse}
      *
@@ -40,6 +42,8 @@ export class Discover {
     /**
      * POST discover/discussing
      *
+     * @deprecated Удалён в Anixart 11 BETA 3 — используйте {@link Discover.hub} (`discussing`).
+     *
      * Возможные коды ответа: {@link DefaultResult}
      * @returns {@link IPageableResponse}
      *
@@ -52,6 +56,8 @@ export class Discover {
 
     /**
      * POST discover/interesting
+     *
+     * @deprecated Удалён в Anixart 11 BETA 3 — используйте {@link Discover.hub} (`interesting`).
      *
      * Возможные коды ответа: {@link DefaultResult}
      * @returns {@link IPageableResponse}
