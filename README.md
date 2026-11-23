@@ -14,7 +14,7 @@ TypeScript-обёртка над API Anixart 11.x для Node.js.
 
 Документация · [Лицензия GPL-2.0](LICENSE)
 
-`anixapi@0.4.2` · Node.js ≥ 18 · актуально под **Anixart 11 BETA 3** (build 26111702)
+`anixapi@0.4.3` · Node.js ≥ 18 · актуально под **Anixart 11 BETA 3** (build 26111702)
 
 ---
 
@@ -73,7 +73,7 @@ if (res.code === DefaultResult.Ok && res.profileToken) {
 
 Флаги доступности: `GET config/urls` → `vk_auth_available`, `google_auth_available`, `telegram_auth_available`, `yandex_auth_available`.
 
-### Новое в 0.4.2 (Anixart 11 BETA 3)
+### Новое в 0.4.2–0.4.3 (Anixart 11 BETA 3)
 
 ```javascript
 // Все блоки страницы «Обзор» одним запросом
