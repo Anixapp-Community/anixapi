@@ -1,5 +1,6 @@
 import { IPageableResponse, IResponse, IBaseComment, CommentAddResult, IBaseCompactComment } from './response'
 import { IProfile, BookmarkType, IBadge } from './profile'
+import { ICollection } from './collection'
 import { IBaseRequestPageable, IBaseSearchRequest } from './request'
 
 export enum ReleaseCategory {
@@ -190,6 +191,8 @@ export interface IRelease {
     badge_count?: number
     /** Превью значков релиза (Anixart 10.5+) */
     badges_preview?: IBadge[] | null
+    /** Anixart 11 BETA 3+: текст ограничения (например, почему отключён просмотр) */
+    restriction_note?: string | null
 }
 
 export interface IVoteRelease {
@@ -390,6 +393,32 @@ export type IEpisodeUpdate = ILastEpisodeUpdate;
 
 export interface IEpisodeUnwatchResponse extends IResponse {}
 export interface IEpisodeWatchResponse extends IResponse {}
+
+/** Anixart 11 BETA 3+: источник с отмеченными эпизодами. */
+export interface IWatchedSource {
+    release_id: number;
+    source_id: number;
+    positions: number[];
+}
+
+/** Anixart 11 BETA 3+: ответ `GET episode/watched`. */
+export interface IEpisodeWatchedResponse extends IResponse {
+    sources: IWatchedSource[];
+}
+
+/** Anixart 11 BETA 3+: ответ `GET discover/hub` — все блоки страницы «Обзор» за один запрос. */
+export interface IDiscoverHubResponse extends IResponse {
+    recommendations: IRelease[];
+    recommendations_page: number;
+    watching: IRelease[];
+    collections: ICollection[];
+    collections_page: number;
+    collections_page_count: number;
+    discussing: IRelease[];
+    interesting: IInteresting[];
+    comments: IReleaseComment[];
+}
+
 export interface IReleaseReportResponse extends IResponse {}
 export interface IReleaseVideoAppealResponse extends IResponse {}
 export interface IReleaseVideoCategoriesResponse extends IResponse {}

@@ -1,5 +1,5 @@
 import { Anixart } from "../../client";
-import { DefaultResult, IBaseApiParams, IEpisodeResponse, IEpisodeUnwatchResponse, IEpisodeUpdate, IEpisodeWatchResponse, IEpisodesResponse, IPageableResponse, IResponse, ISourcesResponse, ITypeResponse } from "../../types";
+import { DefaultResult, IBaseApiParams, IEpisodeResponse, IEpisodeUnwatchResponse, IEpisodeUpdate, IEpisodeWatchResponse, IEpisodeWatchedResponse, IEpisodesResponse, IPageableResponse, IResponse, ISourcesResponse, ITypeResponse } from "../../types";
 
 
 /**
@@ -24,6 +24,38 @@ export class Episode {
     /** @alias {@link Episode.episodeTarget} */
     public async target(releaseId: number, sourceId: number, position: number, options?: IBaseApiParams): Promise<IEpisodeResponse> {
         return this.episodeTarget(releaseId, sourceId, position, options);
+    }
+
+    /**
+     * GET episode/target/{releaseId}/{sourceId}/{position}?download=true (Anixart 11 BETA 3+)
+     *
+     * Ссылка на скачивание эпизода (офлайн-просмотр). Может вернуть коды
+     * `DOWNLOAD_RESTRICTED = 2` и `DOWNLOAD_SOURCE_RESTRICTED = 3`.
+     *
+     * Возможные коды ответа: {@link DefaultResult}
+     * @returns {@link IEpisodeResponse}
+     *
+     * @example
+     * const result = await client.endpoints.episode.downloadTarget(1, 1, 1);
+     */
+    public async downloadTarget(releaseId: number, sourceId: number, position: number, options?: IBaseApiParams): Promise<IEpisodeResponse> {
+        return await this.client.call<number, IEpisodeResponse>({ path: `/episode/target/${releaseId}/${sourceId}/${position}`, queryParams: { download: true }, ...options });
+    }
+
+    /**
+     * GET episode/watched (Anixart 11 BETA 3+)
+     *
+     * Отмеченные эпизоды по списку релизов — для синхронизации «просмотрено» между устройствами.
+     *
+     * Возможные коды ответа: {@link DefaultResult}
+     * @returns {@link IEpisodeWatchedResponse}
+     *
+     * @example
+     * const result = await client.endpoints.episode.watched([1, 2, 3]);
+     */
+    public async watched(releaseIds: number[] | string, options?: IBaseApiParams): Promise<IEpisodeWatchedResponse> {
+        const ids = Array.isArray(releaseIds) ? releaseIds.join(',') : releaseIds;
+        return await this.client.call<number, IEpisodeWatchedResponse>({ path: `/episode/watched`, queryParams: { release_ids: ids }, ...options });
     }
 
     /**

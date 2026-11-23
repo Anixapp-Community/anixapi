@@ -1,5 +1,5 @@
 import { Anixart } from "../../client";
-import { CollectionResult, DefaultResult, IBaseApiParams, ICollection, ICollectionResponse, IPageableResponse, IRelease, IResponse } from "../../types";
+import { CollectionResult, DefaultResult, IBaseApiParams, ICollection, ICollectionHubResponse, ICollectionResponse, IPageableResponse, IRelease, IResponse } from "../../types";
 
 
 /**
@@ -7,6 +7,21 @@ import { CollectionResult, DefaultResult, IBaseApiParams, ICollection, ICollecti
  */
 export class Collection {
     public constructor(private readonly client: Anixart) { }
+
+    /**
+     * GET collection/hub (Anixart 11 BETA 3+)
+     *
+     * Ответ для страницы «Коллекции»: коллекции недели, рекомендованные и свои.
+     *
+     * Возможные коды ответа: {@link DefaultResult}
+     * @returns {@link ICollectionHubResponse}
+     *
+     * @example
+     * const result = await client.endpoints.collection.hub();
+     */
+    public async hub(options?: IBaseApiParams): Promise<ICollectionHubResponse> {
+        return await this.client.call<number, ICollectionHubResponse>({ path: `/collection/hub`, ...options });
+    }
 
     /**
      * GET collection/{id}
@@ -37,14 +52,16 @@ export class Collection {
     /**
      * GET collection/all/profile/{p_id}/{page}
      *
+     * Anixart 11 BETA 3+: query `sort` и `release_id` (например, «коллекции, где есть этот релиз»).
+     *
      * Возможные коды ответа: {@link DefaultResult}
      * @returns {@link IPageableResponse}
      *
      * @example
-     * const result = await client.endpoints.collection.profileCollections(1, 1, ...);
+     * const result = await client.endpoints.collection.profileCollections(1, 1, { sort: 0, release_id: 42 });
      */
-    public async profileCollections(profileId: number, page: number, options?: IBaseApiParams): Promise<IPageableResponse<ICollection>> {
-        return await this.client.call<number, IPageableResponse<ICollection>>({ path: `/collection/all/profile/${profileId}/${page}`, ...options });
+    public async profileCollections(profileId: number, page: number, query?: Record<string, string | number | boolean | undefined>, options?: IBaseApiParams): Promise<IPageableResponse<ICollection>> {
+        return await this.client.call<number, IPageableResponse<ICollection>>({ path: `/collection/all/profile/${profileId}/${page}`, queryParams: query, ...options });
     }
 
     /**

@@ -216,6 +216,9 @@ export class Anixart{
     
                     case (request.image !== null && request.image !== undefined):
                         const formData = new FormData();
+                        for (const [key, value] of Object.entries(request.image.fields ?? {})) {
+                            formData.append(key, value);
+                        }
                         formData.append(request.image.type, request.image.stream, {
                             filename: request.image.name
                         });

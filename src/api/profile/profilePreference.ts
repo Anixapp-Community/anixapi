@@ -31,7 +31,8 @@ export class ProfilePreference {
      * const result = await client.endpoints.profilePreference.avatarEdit(...);
      */
     public async avatarEdit(image?: Buffer, name?: string, options?: IBaseApiParams): Promise<IProfileSettingsResponse> {
-        return await this.client.call<number, IProfileSettingsResponse>({ path: `/profile/preference/avatar/edit`, method: 'POST', image: image ? { type: 'image' as const, name: name ?? 'image.jpg', stream: image } : undefined, ...options });
+        const fileName = name ?? 'image.jpg';
+        return await this.client.call<number, IProfileSettingsResponse>({ path: `/profile/preference/avatar/edit`, method: 'POST', image: image ? { type: 'image' as const, name: fileName, stream: image, fields: { name: fileName } } : undefined, ...options });
     }
 
     /**

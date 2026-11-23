@@ -33,7 +33,9 @@ export interface IBaseRequest extends IBaseApiParams {
         name: string,
         stream: Buffer,
         boundary?: string,
-        type: "file" | "image"
+        type: "file" | "image",
+        /** Дополнительные текстовые части multipart-формы (например `name` у avatar/editImage) */
+        fields?: Record<string, string>
     }
 }
 

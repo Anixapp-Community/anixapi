@@ -1,5 +1,5 @@
 import { Anixart } from "../client";
-import { ICollection, DefaultResult, Writable, FavoriteCollectionAddResult, FavoriteCollectionDeleteResult, ReleaseAddCollectionResult, CollectionDeleteResult, IPageableResponse, IRelease, ICollectionResponse } from "../types";
+import { ICollection, DefaultResult, Writable, FavoriteCollectionAddResult, FavoriteCollectionDeleteResult, ReleaseAddCollectionResult, ReleaseRemoveCollectionResult, CollectionDeleteResult, IPageableResponse, IRelease, ICollectionCreateEditResponse, ICollectionReleasePreview } from "../types";
 import { FullProfile } from "./FullProfile";
 import { Release } from "./Release";
 
@@ -18,6 +18,14 @@ export class Collection {
     public readonly isDeleted: boolean;
     public readonly isFavorite: boolean;
     public readonly releases: Release[];
+    /** Anixart 11 BETA 3+: количество релизов (в списках вместо `releases`) */
+    public readonly releaseCount: number | null;
+    /** Anixart 11 BETA 3+: сколько релизов просмотрено текущим профилем */
+    public readonly watchedCount: number | null;
+    /** Anixart 11 BETA 3+: есть ли запрошенный релиз в коллекции */
+    public readonly hasRelease: boolean | null;
+    /** Anixart 11 BETA 3+: превью релизов для карточки */
+    public readonly releasesPreview: ICollectionReleasePreview[] | null;
 
     constructor(private readonly client: Anixart, collectionResponce: ICollection) {
         this.localId = collectionResponce["@id"];
@@ -33,7 +41,11 @@ export class Collection {
         this.isPrivate = collectionResponce.is_private;
         this.isDeleted = collectionResponce.is_deleted;
         this.isFavorite = collectionResponce.is_favorite;
-        this.releases = collectionResponce.releases.map(r => new Release(this.client, r));
+        this.releases = (collectionResponce.releases ?? []).map(r => new Release(this.client, r));
+        this.releaseCount = collectionResponce.release_count ?? null;
+        this.watchedCount = collectionResponce.watched_count ?? null;
+        this.hasRelease = collectionResponce.has_release ?? null;
+        this.releasesPreview = collectionResponce.releases_preview ?? null;
     }
 
     private writeProperties(prop: keyof this, value: any) {
@@ -64,6 +76,17 @@ export class Collection {
         return request.code;
     }
 
+    /**
+     * Убирает релиз из коллекции (Anixart 11 BETA 3+).
+     *
+     * @returns код ответа {@link ReleaseRemoveCollectionResult}
+     */
+    public async removeRelease(id: number): Promise<DefaultResult | ReleaseRemoveCollectionResult> {
+        const request = await this.client.endpoints.collectionMy.releaseRemove(this.id, id);
+
+        return request.code;
+    }
+
     public async delete(): Promise<DefaultResult | CollectionDeleteResult> {
         const request = await this.client.endpoints.collectionMy.delete(this.id);
 
@@ -76,7 +99,7 @@ export class Collection {
             description,
             releases: releases.map(x => x.id),
             is_private: isPrivate
-        }) as ICollectionResponse;
+        }) as ICollectionCreateEditResponse;
 
         return request.code == DefaultResult.Ok && request.collection ? new Collection(this.client, request.collection) : null;
     }

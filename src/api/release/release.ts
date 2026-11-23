@@ -87,9 +87,26 @@ export class Release {
     }
 
     /**
+     * GET release/{r_id}?details=false (Anixart 11 BETA 3+)
+     *
+     * Облегчённый релиз без тяжёлых деталей — для карточек в списках.
+     *
+     * Возможные коды ответа: {@link DefaultResult}
+     * @returns {@link IReleaseResponse}
+     *
+     * @example
+     * const result = await client.endpoints.release.releaseWithoutDetails(1);
+     */
+    public async releaseWithoutDetails(id2: number, options?: IBaseApiParams): Promise<IReleaseResponse> {
+        return await this.client.call<number, IReleaseResponse>({ path: `/release/${id2}`, queryParams: { details: false }, ...options });
+    }
+
+    /**
      * GET release/{r_id}/continue (Anixart 11+)
      *
-     * Релиз для блока «Продолжить просмотр» (вызывается для последнего просмотренного релиза)
+     * Релиз для блока «Продолжить просмотр» (вызывается для последнего просмотренного релиза).
+     *
+     * @deprecated Удалён в Anixart 11 BETA 3 — используйте `episode/watched` и данные профиля.
      *
      * Возможные коды ответа: {@link DefaultResult}
      * @returns {@link IReleaseResponse}

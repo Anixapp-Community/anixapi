@@ -9,12 +9,12 @@
 
 ## AnixApi
 
-TypeScript-обёртка над API Anixart 10.x для Node.js.  
+TypeScript-обёртка над API Anixart 11.x для Node.js.  
 Эндпоинты · OAuth · редактор статей · `HttpError` / `AnixartError`
 
 Документация · [Лицензия GPL-2.0](LICENSE)
 
-`anixapi@0.4.0` · Node.js ≥ 18 · актуально под **Anixart 10.5**
+`anixapi@0.4.2` · Node.js ≥ 18 · актуально под **Anixart 11 BETA 3** (build 26111702)
 
 ---
 
@@ -73,6 +73,35 @@ if (res.code === DefaultResult.Ok && res.profileToken) {
 
 Флаги доступности: `GET config/urls` → `vk_auth_available`, `google_auth_available`, `telegram_auth_available`, `yandex_auth_available`.
 
+### Новое в 0.4.2 (Anixart 11 BETA 3)
+
+```javascript
+// Все блоки страницы «Обзор» одним запросом
+const hub = await client.endpoints.discover.hub({
+    recommendations_previous_page: 0,
+    collections_previous_page: 0,
+});
+console.log(hub.interesting, hub.watching, hub.collections);
+
+// Хаб коллекций: неделя, рекомендованные, свои
+const collections = await client.endpoints.collection.hub();
+
+// Синхронизация просмотренного и ссылка на скачивание эпизода
+const watched = await client.endpoints.episode.watched([1, 2, 3]);
+const file = await client.endpoints.episode.downloadTarget(1, 2, 3);
+
+// Убрать релиз из своей коллекции
+await client.endpoints.collectionMy.releaseRemove(collectionId, releaseId);
+
+// Облегчённый релиз для карточек
+await client.endpoints.release.releaseWithoutDetails(1);
+```
+
+`Collection` в списках теперь содержит `releaseCount`, `watchedCount`, `hasRelease`, `releasesPreview`;
+`Release` — `restrictionNote`. Методы удалённых в BETA 3 эндпоинтов (`discover/comments`,
+`discover/discussing`, `discover/interesting`, `release/{id}/continue`) помечены `@deprecated` и
+оставлены для совместимости со старыми сборками.
+
 ---
 
 
@@ -80,6 +109,8 @@ if (res.code === DefaultResult.Ok && res.profileToken) {
 ## Возможности
 
 - Эндпоинты через `client.endpoints.*` (релизы, профиль, каналы, лента, поиск, уведомления, жалобы, …)
+- **Хабы** — `discover.hub()`, `collection.hub()` (Anixart 11 BETA 3)
+- **Эпизоды** — `episode.watched()`, `episode.downloadTarget()`, `episode.watch()` / `unwatch()`
 - **OAuth** — VK, Google, Telegram, Yandex (sign-in / sign-up / bind / unbind)
 - **Редактор статей** — `uploadArticleImage`, `generateEmbedData`, `ArticleBuilder`
 - **Запросы** — `timeoutMs`, `AbortSignal`, `apiVersion`, свой `userAgent`
@@ -120,6 +151,7 @@ try {
 ## TODO
 
 - [x] Эндпоинты API 10.5
+- [x] Эндпоинты API 11 BETA 3 (хабы, синхронизация эпизодов, офлайн-скачивание)
 - [x] OAuth: VK / Google / Telegram / Yandex
 - [x] Редактор статей (upload / embed)
 - [x] `HttpError` / `AnixartError`, таймаут и отмена

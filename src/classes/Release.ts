@@ -75,6 +75,8 @@ export class Release {
     public readonly videoBanners: IVideoBanners[];
     public readonly profileReleaseTypeNotificationPreferenceCount: number;
     public readonly isReleaseTypeNotificationsEnabled: boolean;
+    /** Anixart 11 BETA 3+: текст ограничения (почему отключён просмотр и т.п.) */
+    public readonly restrictionNote: string | null;
 
     constructor(private readonly client: Anixart, releaseResponse: IRelease) {
         this.id = releaseResponse.id;
@@ -147,6 +149,7 @@ export class Release {
         this.videoBanners = releaseResponse.video_banners;
         this.profileReleaseTypeNotificationPreferenceCount = releaseResponse.profile_release_type_notification_preference_count;
         this.isReleaseTypeNotificationsEnabled = releaseResponse.is_release_type_notifications_enabled;
+        this.restrictionNote = releaseResponse.restriction_note ?? null;
     }
 
     private writeProperties(prop: keyof this, value: any) {

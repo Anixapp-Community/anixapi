@@ -1,5 +1,5 @@
 import { Anixart } from "../client";
-import { DefaultResult, IBaseApiParams, IInteresting, IPageableResponse, IRelease, IReleaseComment, IResponse } from "../types";
+import { DefaultResult, IBaseApiParams, IDiscoverHubResponse, IInteresting, IPageableResponse, IRelease, IReleaseComment, IResponse } from "../types";
 
 
 /**
@@ -7,6 +7,22 @@ import { DefaultResult, IBaseApiParams, IInteresting, IPageableResponse, IReleas
  */
 export class Discover {
     public constructor(private readonly client: Anixart) { }
+
+    /**
+     * GET discover/hub (Anixart 11 BETA 3+)
+     *
+     * Единый ответ для страницы «Обзор»: рекомендации, смотрю, коллекции, обсуждаемое,
+     * интересное и комментарии недели — вместо отдельных `discover/*`.
+     *
+     * Возможные коды ответа: {@link DefaultResult}
+     * @returns {@link IDiscoverHubResponse}
+     *
+     * @example
+     * const result = await client.endpoints.discover.hub();
+     */
+    public async hub(query?: Record<string, string | number | boolean | undefined>, options?: IBaseApiParams): Promise<IDiscoverHubResponse> {
+        return await this.client.call<number, IDiscoverHubResponse>({ path: `/discover/hub`, queryParams: query, ...options });
+    }
 
     /**
      * POST discover/comments
